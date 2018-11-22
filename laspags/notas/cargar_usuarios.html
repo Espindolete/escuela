@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cargar usuarios</title>
+    <script src="js/vue2-5-16.js"></script>
+    <script src="js/axios.min.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+        <nav class="navbar navbar-dark bg-dark">
+            <span class="navbar-brand mb-0 h1">
+                    <div class="container">
+                    Cargar usuarios
+                </div>
+                </span>
+                <button onclick="goBack()" class="btn btn-primary">Volver</button>
+                <script>
+                function goBack() {
+                    window.history.back();
+                }
+                </script>
+            </nav>
+            <br>
+    <div id="app">
+          <div class="container">
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <th>Tipo de usuario</th>
+                        <th>Nombre</th>
+                        <th>Usuario</th>
+                        <th>Contraseña</th>
+                        <th>Enviar</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <select class="selection-2" v-model="cargar">
+                                    <option value="1">Profesor</option>
+                                    <option value="2">Preceptor</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" v-model="nombre" class="form-control" placeholder="Nombre">
+                            </td>
+                            <td>
+                                <input type="text" v-model="user" class="form-control" placeholder="Usuario">
+                            </td>
+                            <td>
+                                <input type="text" v-model="pass" class="form-control" placeholder="Contraseña">
+                            </td>
+                            <td>
+                                <div v-if="(cargar)">
+                                <div v-if="cargar ==2">
+                                <div v-if="precepublicado==0">
+                                    <button class="btn btn-success" v-on:click="postPreceptor() + (precepublicado=1)">
+                                        Cargar preceptor
+                                    </button>
+                                </div>
+                                <div v-else>
+                                    <h3>Publicado</h3>
+                                </div>
+                                </div>
+                                <div v-if="cargar ==1">
+                                <div v-if="profepublicado==0">
+                                    <button class="btn btn-info" v-on:click="postProfesor() + (profepublicado=1)">
+                                        Cargar profesor
+                                    </button>
+                                </div>
+                                <div v-else>
+                                    <h3>Publicado</h3>
+                                </div>
+                                </div>
+                                </div>
+                                <div v-else>
+                                    <p style="color: red">Seleccione el tipo</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+          </div>
+          </div>
+    </div>
+</body>
+
+<footer>
+    <!-- Esta porcion codigo va a correr la funcion autorun al momento en que termina de cargar la pagina-->
+    <script type="text/javascript">
+        function autorun() {
+            }
+            new Vue({
+                el: '#app',
+                data: {
+                    cargar : null,
+                    nombre : null,
+                    user : null,
+                    pass : null,
+                    precepublicado : 0,
+                    profepublicado : 0
+                },
+                methods: {
+                    postPreceptor() {
+                        axios.post('http://localhost:3000/postPreceptor',
+                        {
+                            nombre: this.nombre, user : this.user,
+                            pass : this.pass
+                        },
+                        {
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        }).then(response => console.log(response))
+                        .catch(error => { console.log(error) });
+                    },
+                    postProfesor() {
+                        axios.post('http://localhost:3000/postProfesor',
+                        {
+                            nombre: this.nombre, user : this.user,
+                            pass : this.pass
+                        },
+                        {
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        }).then(response => console.log(response))
+                        .catch(error => { console.log(error) });
+                    }
+                },
+            })
+        if (window.addEventListener) window.addEventListener("load", autorun, false);
+        else if (window.attachEvent) window.attachEvent("onload", autorun);
+        else window.onload = autorun;
+    </script>
+
+</footer>
+
+</html>

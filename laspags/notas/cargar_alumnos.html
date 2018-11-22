@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cargar alumnos</title>
+    <script src="js/vue2-5-16.js"></script>
+    <script src="js/axios.min.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+        <nav class="navbar navbar-dark bg-dark">
+            <span class="navbar-brand mb-0 h1">
+                    <div class="container">
+                    Cargar alumnos
+                </div>
+                </span>
+                <button onclick="goBack()" class="btn btn-primary">Volver</button>
+                <script>
+                function goBack() {
+                    window.history.back();
+                }
+                </script>
+            </nav>
+            <br>
+    <div id="app">
+          <div class="container">
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <th>Nombre</th>
+                        <th>Curso</th>
+                        <th>Enviar</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="text" v-model="nombre" class="form-control" placeholder="Nombre">
+                            </td>
+                            <td>
+                                <select class="selection-2" v-model="curso_fk">
+                                    <option v-for="curso in cursos" v-bind:value="curso.id">{{curso.nombre}}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <div v-if="curso_fk">
+                                    <div v-if="publicado == 0">
+                                        <button class="btn btn-success" v-on:click="postAlumno() + (publicado=1)">
+                                            Cargar alumno
+                                        </button>
+                                    </div>
+                                    <div v-else>
+                                        <h3>Publicado</h3>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+          </div>
+          </div>
+    </div>
+</body>
+
+<footer>
+    <script type="text/javascript">
+        function autorun() {
+            }
+            new Vue({
+                el: '#app',
+                data: {
+                    publicado : 0,
+                    curso_fk : null,
+                    nombre : null,
+                    cursos : []
+                },
+                mounted() {
+                    this.getCurso();
+                },
+                methods: {
+                    getCurso : function (){
+                        axios.get('http://localhost:3000/getCursos')
+                        .then(response => {
+                            this.cursos = response.data;
+                        })
+                        .catch(error => { console.log(error) });
+                    },
+                    postAlumno() {
+                        axios.post('http://localhost:3000/postAlumno',
+                        {
+                            nombre: this.nombre, curso_fk : this.curso_fk
+                        },
+                        {
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        }).then(response => {console.log(response); publicado=1})
+                        .catch(error => { console.log(error) });
+                    }
+                },
+            })
+        if (window.addEventListener) window.addEventListener("load", autorun, false);
+        else if (window.attachEvent) window.attachEvent("onload", autorun);
+        else window.onload = autorun;
+    </script>
+
+</footer>
+
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Elegir materia</title>
+    <script src="js/vue2-5-16.js"></script>
+    <script src="js/axios.min.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+            <span class="navbar-brand mb-0 h1">
+                <div class="container">
+                Elegir materia
+                </div>
+            </span>
+    </nav>
+    
+    <div id="app">
+        <div class="container">
+            <h1>Elija una materia</h1>
+            <br>
+        	<select class="selection-2" v-model="selected">
+                <option v-for="materia in materias" v-bind:value="materia.id">{{materia.nombre}}</option>
+			</select>
+            <div v-if="(selected)">
+                <br>
+                <a v-bind:href="'profe_elegir_curso.html?materia=' + selected" class="btn btn-info" role="button">Continuar</a>
+            </div>
+        </div>
+    </div>
+</body>
+<footer>
+    <script type="text/javascript">
+        var urlParams = new URLSearchParams(window.location.search);
+        prof = urlParams.get('profe');
+
+        function autorun() {
+            new Vue({
+                el: '#app',
+                data: {
+                    search : prof,
+                    selected : null,
+                    materias : [],
+                },
+                mounted() {
+                    this.getMateria();
+                },
+                methods: {
+                    getMateria : function (){
+                        axios.get('http://localhost:3000/getMateriasProf/'+prof)
+                        .then(response => {
+                            console.log(response);
+                            this.materias = response.data;
+                        })
+                        .catch(error => { console.log(error) });
+                    }
+                }
+            })
+        }
+        if (window.addEventListener) window.addEventListener("load", autorun, false);
+        else if (window.attachEvent) window.attachEvent("onload", autorun);
+        else window.onload = autorun;
+    </script>
+</footer>
+</html>

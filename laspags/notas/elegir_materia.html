@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <script src="js/vue2-5-16.js"></script>
+    <script src="js/axios.min.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+            <span class="navbar-brand mb-0 h1">
+                <div class="container">
+                Elegir materia
+                </div>
+            </span>
+    </nav>
+    
+    <div id="app">
+        <div class="container">
+            <h1>Elija una materia</h1>
+            <br>
+        	<select class="selection-2" v-model="selected">
+                <option v-for="materia in materias" v-bind:value="materia.id">{{materia.nombre}}</option>
+			</select>
+            <div v-if="(selected)">
+                <br>
+                <a v-bind:href="'elegir_curso.html?materia=' + selected" class="btn btn-info" role="button">Continuar</a>
+            </div>
+        </div>
+    </div>
+</body>
+<footer>
+    <script src="js/individual.js"></script>
+</footer>
+</html>
