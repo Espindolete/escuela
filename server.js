@@ -67,6 +67,13 @@ app.get('/getCursos',(req,res)=>{
   })
 })
 
+app.get('/getMateriasCur/:id',(req,res)=>{
+  let sql=`SELECT materias.id, materias.nombre FROM materias INNER JOIN cursohasmaterias ON cursohasmaterias.materia_fk = materias.id INNER JOIN cursos ON cursohasmaterias.curso_fk = cursos.id where cursos.id =${req.params.id}`;
+  db.query(sql,(err,result)=>{
+    if(err) console.log(err);
+    res.send(result);
+  })
+})
 
 app.get('/getCursoMat/:id',(req,res)=>{
   let sql=`SELECT cursos.id,cursos.nombre FROM cursos INNER JOIN cursohasmaterias ON cursohasmaterias.curso_fk = cursos.id INNER JOIN materias ON cursohasmaterias.materia_fk = materias.id where materias.id =${req.params.id}`;
@@ -77,9 +84,18 @@ app.get('/getCursoMat/:id',(req,res)=>{
   })
 });
 
+app.get('/getCursoPrece/:prece',(req,res)=>{
+  let sql=`select * from cursos where preceptor_fk=${req.params.prece}`
+  db.query(sql,(err,result)=>{
+    if(err) console.log(err);
+    res.send(result);
+  })
 
-app.get('/getNotas/:alum/:mat',(req,res)=>{
-  let sql=`select * from notas where materia_fk=${req.params.mat} and alumno_fk=${req.params.alum}`;
+})
+
+
+app.get('/getNotas/:mat&:cur',(req,res)=>{
+  let sql=`select alumnos.nombre,notas.trimestre,notas.valor from alumnos,notas where materia_fk=${req.params.mat} and alumno_fk=${req.params.cur}`;//modificar
   db.query(sql,(err,result)=>{
     if(err) console.log(err);
     //console.log(result);
@@ -91,7 +107,6 @@ app.get('/getAlumnosCur/:curso',(req,res)=>{
   let sql=`select * from alumnos where curso_fk=${req.params.curso}`;
   db.query(sql,(err,result,fields)=>{
     if(err) console.log(err);
-    console.log(sql);
     res.send(result);
   })
 });
@@ -104,7 +119,7 @@ app.get('/getMateriasProf/:prof',(req,res)=>{
   })
 })
 
-////////////////POST//////////////////
+///////////////////////////////////POST////////////////////////////////////
 app.post('/postMateria',(req,res)=>{
   let sql="insert into materias set ?"
   db.query(sql,req.body,(err,result)=>{
@@ -131,7 +146,7 @@ app.post('postPreceptor',(req,res)=>{
 
 })
 
-app.post('/postAlumno',(req,res)=>{
+app.post('/postAlumno',(req,res)=>{//modificar
   let sql='insert into alumnos set ?';
   db.query(sql,req.body,(err,result)=>{
     if(err) console.log(err);
@@ -148,7 +163,7 @@ app.post('/postCurso',(req,res)=>{
 })
 
 app.post('/postNota',(req,res)=>{
-  let sql=`insert into notas set ?`;
+  let sql=`insert into notas set ?`;//modificar
   let query= db.query(sql,req.body,(err,result)=>{
     if(err)console.log(err);
     //console.log(req.body);
