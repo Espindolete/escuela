@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <script src="js/vue2-5-16.js"></script>
+    <script src="js/axios.min.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+        <nav class="navbar navbar-dark bg-dark">
+            <span class="navbar-brand mb-0 h1">
+                    <div class="container">
+                    Notas del alumno
+                </div>
+                </span>
+            </nav>
+            <br>
+    <div id="app">
+          <div class="container">
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <th>Valor</th>
+                        <th>Trimestre</th>
+                    </thead>
+                    <tbody>
+                        <tr v-for="nota in notas">
+                            <td>{{nota.valor}}</td>
+                            <td>{{nota.trimestre}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+          </div>
+          </div>
+    </div>
+</body>
+
+<footer>
+    <!-- Esta porcion codigo va a correr la funcion autorun al momento en que termina de cargar la pagina-->
+    <script type="text/javascript">
+        var urlParams = new URLSearchParams(window.location.search);
+        alum = urlParams.get('alumno');
+        cur = urlParams.get('curso');
+        mat = urlParams.get('materia');
+        
+        function autorun() {
+            }
+            new Vue({
+                el: '#app',
+                data: {
+                    search : alum,
+                    search2 : cur,
+                    search3 : mat,
+                    notas : []
+                },
+                mounted() {
+                    this.getNotas();
+                },
+                methods: {
+                    getNotas : function (){
+                        axios.get('http://localhost:3000/getNotas/'+alum+'&'+mat)
+                        .then(response => {
+                            console.log(response);
+                            this.notas = response.data;
+                        })
+                        .catch(error => { console.log(error) });
+                    },
+                }
+            })
+        if (window.addEventListener) window.addEventListener("load", autorun, false);
+        else if (window.attachEvent) window.attachEvent("onload", autorun);
+        else window.onload = autorun;
+    </script>
+
+</footer>
+
+</html>

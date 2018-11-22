@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cargar notas</title>
+    <script src="js/vue2-5-16.js"></script>
+    <script src="js/axios.min.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+        <nav class="navbar navbar-dark bg-dark">
+            <span class="navbar-brand mb-0 h1">
+                    <div class="container">
+                    Cargar notas
+                </div>
+                </span>
+                <button onclick="goBack()" class="btn btn-primary">Volver</button>
+                <script>
+                function goBack() {
+                    window.history.back();
+                }
+                </script>
+            </nav>
+            <br>
+    <div id="app">
+          <div class="container">
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Nota</th>
+                        <th>Trimestre</th>
+                        <th>Enviar</th>
+                    </thead>
+                    <tbody>
+                        <tr v-for="alumno in alumnos">
+                            <td>{{alum = alumno.id}}</td>
+                            <td>{{alumno.nombre}}</td>
+                            <td>
+                                <select class="selection-2" v-model="valor">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="selection-2" v-model="trimestre">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                            </td>
+                            <td>
+                                <div v-if="publicado===0">
+                                    <button class="btn btn-danger" v-on:click="posteAr() + (publicado=1)">
+                                        Cargar nota
+                                    </button>
+                                </div>
+                                <div v-else>
+                                    <h3>Publicado</h3>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+          </div>
+          </div>
+    </div>
+</body>
+
+<footer>
+    <!-- Esta porcion codigo va a correr la funcion autorun al momento en que termina de cargar la pagina-->
+    <script type="text/javascript">
+        var urlParams = new URLSearchParams(window.location.search);
+        cur = urlParams.get('curso');
+        mat = urlParams.get('materia');
+
+        function autorun() {
+            }
+            new Vue({
+                el: '#app',
+                data: {
+                    curso : cur,
+                    materia : mat,
+                    search : cur,
+
+                    valor : null,
+                    trimestre : null,
+                    alum : null,
+
+                    alumnos : [],
+
+                    publicado : 0
+                },
+                mounted() {
+                    this.getAlumno();
+                },
+                methods: {
+                    getAlumno : function (){
+                        axios.get('http://localhost:3000/getAlumnosCur/'+cur)
+                        .then(response => {
+                            console.log(response);
+                            this.alumnos = response.data;
+                        })
+                        .catch(error => { console.log(error) });
+                    },
+                    posteAr() {
+                        axios.post('http://localhost:3000/postNota',
+                        {
+                            materia_fk: this.materia, curso_fk : this.curso,
+                            alumno_fk : this.alum, trimestre : this.trimestre,
+                            valor : this.valor
+                        },
+                        {
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        }).then(response => console.log(response))
+                        .catch(error => { console.log(error) });
+                    }
+                },
+                computed: {
+                    alumnoFiltrado: function(){
+                        let searchTem = (this.search || "")
+                        return this.alumnos.filter((item) => {
+                            return (item.curso_fk.match(this.search))
+                        });
+                    }
+                }
+            })
+        if (window.addEventListener) window.addEventListener("load", autorun, false);
+        else if (window.attachEvent) window.attachEvent("onload", autorun);
+        else window.onload = autorun;
+    </script>
+
+</footer>
+
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <script src="js/vue2-5-16.js"></script>
+    <script src="js/axios.min.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+        <nav class="navbar navbar-dark bg-dark">
+            <span class="navbar-brand mb-0 h1">
+                    <div class="container">
+                    Elegir alumno
+                </div>
+                </span>
+            </nav>
+            <br>
+    <div id="app">
+          <div class="container">
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <th>Nombre</th>
+                        <th>Notas</th>
+                    </thead>
+                    <tbody>
+                        <tr v-for="materia in materias" v-if="materia.id!=18">
+                            <td>{{materia.nombre}}</td>
+                            <td>
+                                <a v-bind:href="'prece_general_notas.html?curso=' + curso
+                                + '&materia=' + materia.id" class="btn btn-info" role="button">Ver notas</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+          </div>
+          </div>
+    </div>
+</body>
+
+<footer>
+    <!-- Esta porcion codigo va a correr la funcion autorun al momento en que termina de cargar la pagina-->
+    <script type="text/javascript">
+        var urlParams = new URLSearchParams(window.location.search);
+        cur = urlParams.get('curso');
+
+        function autorun() {
+            new Vue({
+                el: '#app',
+                data: {
+                    materias : [],
+                    curso : cur
+                },
+                mounted() {
+                    this.getMateria();
+                },
+                methods: {
+                    getMateria : function (){
+                        axios.get('http://localhost:3000/getMateriasCur/'+cur)
+                        .then(response => {
+                            console.log("Materias cargadas");
+                            console.log(response);
+                            this.materias = response.data;
+                        })
+                        .catch(error => { console.log(error) });
+                    },
+                }
+            })
+        }
+        if (window.addEventListener) window.addEventListener("load", autorun, false);
+        else if (window.attachEvent) window.attachEvent("onload", autorun);
+        else window.onload = autorun;
+    </script>
+
+</footer>
+
+</html>

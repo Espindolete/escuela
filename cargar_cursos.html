@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Cargar cursos</title>
+
+        <link rel="stylesheet" href="css/roboto.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="assets/css/form-elements.css">
+        <link rel="stylesheet" href="assets/css/style.css">
+
+        <script src="js/vue2-5-16.js"></script>
+        <script src="js/axios.min.js"></script>
+    </head>
+
+    <body style="background-color: #314a7c">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <span class="navbar-brand mb-0 h1">
+                    <div class="container">
+                    Cargar curso
+                    </div>
+            </span>
+            <button onclick="goBack()" class="btn btn-primary">Volver</button>
+            <script>
+                function goBack() {
+                    window.history.back();
+                }
+            </script>
+            </nav>
+        <div class="top-content">
+            <div class="inner-bg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2 form-box" id="app">
+                        	<div class="form-top">
+                        		<div class="form-top-left">
+                        			<h3>Carga de cursos</h3>
+                            		<p>Escriba el nombre del curso</p>
+                        		</div>
+                            </div>
+                            <div class="form-bottom">
+			                    <div class="login-form">
+			                    	<div class="form-group">
+			                        	<input type="text" placeholder="Nombre del curso" v-model="nombre" class="form-username form-control">
+			                        </div>
+			                        <h3>Elija el preceptor a cargo del curso</h3>
+                                    <select class="form-control" v-model="prece_fk">
+                                        <option v-for="prece in preceptores" v-bind:value="prece.id">{{prece.nombre}}</option>
+                                    </select>
+			                        <h3>Elija la materia 1 del curso</h5>
+                                    <p>Si no requiere, <strong>seleccione dejar en blanco</strong></p>
+                                    <select class="form-control" v-model="M1">
+                                        <option v-for="materia in materias" v-bind:value="materia.id">{{materia.nombre}}</option>
+                                    </select>
+                                    <h3>Elija la materia 2 del curso</h5>
+                                    <p>Si no requiere, <strong>seleccione dejar en blanco</strong></p>
+                                    <select class="form-control" v-model="M2">
+                                        <option v-for="materia in materias" v-bind:value="materia.id">{{materia.nombre}}</option>
+                                    </select>
+                                    <h3>Elija la materia 3 del curso</h5>
+                                    <p>Si no requiere, <strong>seleccione dejar en blanco</strong></p>
+                                    <select class="form-control" v-model="M3">
+                                        <option v-for="materia in materias" v-bind:value="materia.id">{{materia.nombre}}</option>
+                                    </select>
+                                    <h3>Elija la materia 4 del curso</h5>
+                                    <p>Si no requiere, <strong>seleccione dejar en blanco</strong></p>
+                                    <select class="form-control" v-model="M4">
+                                        <option v-for="materia in materias" v-bind:value="materia.id">{{materia.nombre}}</option>
+                                    </select>
+                                    <h3>Elija la materia 5 del curso</h5>
+                                    <p>Si no requiere, <strong>seleccione dejar en blanco</strong></p>
+                                    <select class="form-control" v-model="M5">
+                                        <option v-for="materia in materias" v-bind:value="materia.id">{{materia.nombre}}</option>
+                                    </select>
+                                    <h3>Elija la materia 6 del curso</h5>
+                                    <p>Si no requiere, <strong>seleccione dejar en blanco</strong></p>
+                                    <select class="form-control" v-model="M6">
+                                        <option v-for="materia in materias" v-bind:value="materia.id">{{materia.nombre}}</option>
+                                    </select>
+                                    <h3>Elija la materia 7 del curso</h5>
+                                    <p>Si no requiere, <strong>seleccione dejar en blanco</strong></p>
+                                    <select class="form-control" v-model="M7">
+                                        <option v-for="materia in materias" v-bind:value="materia.id">{{materia.nombre}}</option>
+                                    </select>
+                                    <h3>Elija la materia 8 del curso</h5>
+                                    <p>Si no requiere, <strong>seleccione dejar en blanco</strong></p>
+                                    <select class="form-control" v-model="M8">
+                                        <option v-for="materia in materias" v-bind:value="materia.id">{{materia.nombre}}</option>
+                                    </select>
+                                    <h3>Elija la materia 9 del curso</h5>
+                                    <p>Si no requiere, <strong>seleccione dejar en blanco</strong></p>
+                                    <select class="form-control" v-model="M9">
+                                        <option v-for="materia in materias" v-bind:value="materia.id">{{materia.nombre}}</option>
+                                    </select>
+                                    <h3>Elija la materia 10 del curso</h5>
+                                    <p>Si no requiere, <strong>seleccione dejar en blanco</strong></p>
+                                    <select class="form-control" v-model="M10">
+                                        <option v-for="materia in materias" v-bind:value="materia.id">{{materia.nombre}}</option>
+                                    </select>
+                                    <h3>Elija la materia 11 del curso</h5>
+                                    <p>Si no requiere, <strong>seleccione dejar en blanco</strong></p>
+                                    <select class="form-control" v-model="M11">
+                                        <option v-for="materia in materias" v-bind:value="materia.id">{{materia.nombre}}</option>
+                                    </select>
+                                    <h3>Elija la materia 12 del curso</h5>
+                                    <p>Si no requiere, <strong>seleccione dejar en blanco</strong></p>
+                                    <select class="form-control" v-model="M12">
+                                        <option v-for="materia in materias" v-bind:value="materia.id">{{materia.nombre}}</option>
+                                    </select>
+                                    <h3>Elija la materia 13 del curso</h5>
+                                    <p>Si no requiere, <strong>seleccione dejar en blanco</strong></p>
+                                    <select class="form-control" v-model="M13">
+                                        <option v-for="materia in materias" v-bind:value="materia.id">{{materia.nombre}}</option>
+                                    </select>
+                                    <h3>Elija la materia 14 del curso</h5>
+                                    <p>Si no requiere, <strong>seleccione dejar en blanco</strong></p>
+                                    <select class="form-control" v-model="M14">
+                                        <option v-for="materia in materias" v-bind:value="materia.id">{{materia.nombre}}</option>
+                                    </select>
+                                    <h3>Elija la materia 15 del curso</h5>
+                                    <p>Si no requiere, <strong>seleccione dejar en blanco</strong></p>
+                                    <select class="form-control" v-model="M15">
+                                        <option v-for="materia in materias" v-bind:value="materia.id">{{materia.nombre}}</option>
+                                    </select>
+                                    <h3>Elija la materia 16 del curso</h5>
+                                    <p>Si no requiere, <strong>seleccione dejar en blanco</strong></p>
+                                    <select class="form-control" v-model="M16">
+                                        <option v-for="materia in materias" v-bind:value="materia.id">{{materia.nombre}}</option>
+                                    </select>
+                                    <div v-if="prece_fk && M1 && M2 && M3 && M4 && M5 && M6 &&
+                                    M7 && M8 && M9 && M10 && M11 && M12 && M13 && M14 && M15 && M16">
+                                        <div v-if="publicado == 0">
+                                            <br>
+                                            <button class="btn btn-success" v-on:click="postCurso() + (publicado=1)">
+                                                Cargar curso
+                                            </button>
+                                        </div>
+                                        <div v-else>
+                                            <h3>Publicado</h3>
+                                        </div>
+                                    </div>
+			                    </div>
+		                    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <footer>
+    <script type="text/javascript">
+        function autorun() {
+            new Vue({
+                el: '#app',
+                data: {
+                    publicado : 0,
+                    prece_fk : null,
+                    nombre : null,
+                    M1 : null,
+                    M2 : null,
+                    M3 : null,
+                    M4 : null,
+                    M5 : null,
+                    M6 : null,
+                    M7 : null,
+                    M8 : null,
+                    M9 : null,
+                    M10 : null,
+                    M11 : null,
+                    M12 : null,
+                    M13 : null,
+                    M14 : null,
+                    M15 : null,
+                    M16 : null,
+                    preceptores : [],
+                    materias : []
+                },
+                mounted() {
+                    this.getProfe();
+                    this.getMateria();
+                },
+                methods: {
+                    getProfe : function (){
+                        axios.get('http://localhost:3000/getPreceptores')
+                        .then(response => {
+                            this.preceptores = response.data;
+                        })
+                        .catch(error => { console.log(error) });
+                    },
+                    getMateria : function (){
+                        axios.get('http://localhost:3000/getMaterias')
+                        .then(response => {
+                            this.materias = response.data;
+                        })
+                        .catch(error => { console.log(error) });
+                    },
+                    postCurso() {
+                        axios.post('http://localhost:3000/postCurso',
+                        {
+                            nombre: this.nombre, preceptor_fk : this.prece_fk,
+                            M1 : this.M1, M2 : this.M2, M3 : this.M3,
+                            M4 : this.M4, M5 : this.M5, M6 : this.M6,
+                            M7 : this.M7, M8 : this.M8, M9 : this.M9,
+                            M10 : this.M10, M11 : this.M11, M12 : this.M12,
+                            M13 : this.M13, M14 : this.M14, M15 : this.M15,
+                            M16 : this.M16
+                        },
+                        {
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        }).then(response => console.log(response))
+                        .catch(error => { console.log(error) });
+                    }
+                },
+            })
+        }
+        if (window.addEventListener) window.addEventListener("load", autorun, false);
+        else if (window.attachEvent) window.attachEvent("onload", autorun);
+        else window.onload = autorun;
+    </script>
+
+</footer>
+</html>

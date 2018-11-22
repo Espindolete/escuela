@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <script src="js/vue2-5-16.js"></script>
+    <script src="js/axios.min.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+        <nav class="navbar navbar-dark bg-dark">
+            <span class="navbar-brand mb-0 h1">
+                    <div class="container">
+                    Notas del alumno
+                </div>
+                </span>
+            </nav>
+            <br>
+    <div id="app">
+          <div class="container">
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                    	<th>Materia</th>
+                        <th>Valor</th>
+                        <th>Trimestre</th>
+                    </thead>
+                    <tbody>
+                        <tr v-for="nota of notaFiltrada">
+                        	<td>
+                        		<div v-if = "materias.find(x => x.id == nota.materia_fk)">
+					              <p class="card-text">{{materias.find(x => x.id == nota.materia_fk).nombre}}</p>
+					            </div>
+					        </td>
+                            <td>{{nota.valor}}</td>
+                            <td>{{nota.trimestre}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+          </div>
+          </div>
+    </div>
+</body>
+
+<footer>
+    <!-- Esta porcion codigo va a correr la funcion autorun al momento en que termina de cargar la pagina-->
+    <script type="text/javascript">
+        var urlParams = new URLSearchParams(window.location.search);
+        alum = urlParams.get('alumno');
+        cur = urlParams.get('curso');
+        mat = urlParams.get('materia');
+        
+        function autorun() {
+            }
+            new Vue({
+                el: '#app',
+                data() {
+		          return {
+		            search : alum,
+                    search2 : cur,
+                    notas : [],
+                    materias: []
+		          }
+		        },
+                beforeCreate() {
+		          axios.get('http://localhost/ejemplo/api/api.php/notas')
+		            .then(response => {
+		              var self = this;
+		              response.data.forEach(function (element) {
+		                self.getMateria(element.materia_fk).then(result => {
+		                  console.log(result.data);
+		                  self.materias.push(result.data);
+		                })
+		                .catch(error => { console.log(error) });
+		              });
+		              this.notas = response.data;
+		              console.log("notas");
+		              console.log(this.notas);
+		              console.log("materias");
+		              console.log(this.materias);
+		            })
+		            .catch(error => { console.log(error) });
+		        },
+                methods: {
+                    getMateria(id) { //método que retorna una promesa de que va a encontrar una entidad secundaria
+			            return axios.get('http://localhost/ejemplo/api/api.php/materias/' + id);
+			          }
+                },
+                computed: {
+                    notaFiltrada: function(){
+                        let searchTem = (this.search || "")
+                        let searchTem2 = (this.search2 || "")
+                        return this.notas.filter((item) => {
+                            return (
+                            item.alumno_fk.match(this.search) &&
+                            item.curso_fk.match(this.search2))
+                        });
+                    }
+                }
+            })
+        if (window.addEventListener) window.addEventListener("load", autorun, false);
+        else if (window.attachEvent) window.attachEvent("onload", autorun);
+        else window.onload = autorun;
+    </script>
+
+</footer>
+
+</html>
